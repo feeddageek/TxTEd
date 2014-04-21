@@ -1,0 +1,31 @@
+#window{
+    display:flex;
+    flex-direction:column;
+    position:fixed;
+    top:0;
+    right:0;
+    bottom:0;
+    left:0;
+}
+#mainbar{
+    height:20px;
+    display:flex;
+    flex-direction:row;
+    align-items: stretch;
+    -webkit-app-region: drag;
+    background-color:#333333;
+}
+#tabs{
+    flex:1 0 auto;
+    max-width:100%;
+}
+#maximize{
+  background-image: url('images/maximize.svg');
+}
+#close {
+  background-image: url('images/close.svg');
+}
+
+#editor{
+  flex:1 0 auto;
+}

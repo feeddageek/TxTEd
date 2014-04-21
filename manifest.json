@@ -1,0 +1,24 @@
+{
+    "name": "TxTEd",
+    "description": "TxTEd Text Editor",
+    "version": "0.1.0.1",
+    "manifest_version": 2,
+    "minimum_chrome_version": "31.0",
+    "offline_enabled": true,
+    "app": {
+        "background": {
+            "scripts":["js/background.js"]
+        }
+    },
+    "permissions": [
+        {"fileSystem": ["write", "retainEntries"]},
+        "storage"
+    ],
+    "file_handlers": {
+        "text": {
+            "title": "TexTEd",
+            "types": ["text/*"],
+            "extensions" : ["c", "c++", "cpp", "cs", "css", "h", "html", "java", "js", "json", "manifest", "txt", "xml"]
+        }
+    }
+}
