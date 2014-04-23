@@ -13,7 +13,7 @@ function TxtWin(){
  * @param {object} launchData
  */
 TxtWin.prototype.init = function (launchData){
-  this.tabbar = document.getElementById("tabs");
+  this.tabbar = document.getElementById("tab-container");
   this.id = chrome.app.window.current().id;
   if(launchData&&launchData.items){
     for(var i in launchData.items){

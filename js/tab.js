@@ -4,12 +4,13 @@
  * @param {FileEntry} file - File to open
  */
 function Tab(file){
-  this.element = document.createElement("div");
+  this.element = document.createElement("li");
   this.element.classList.add("tab");
+  this.element.innerHTML = "<div class=name></div><div class=close></div>";
   if(file&&file.name){
-    this.element.textContent = file.name;
+    this.element.firstElementChild.textContent = file.name;
   }else{
-    this.element.textContent = "Untiteld";
+    this.element.firstElementChild.textContent = "Untiteld";
   this.element.classList.add("unsaved");
   }
   this.element.draggable = true;
