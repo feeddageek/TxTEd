@@ -44,3 +44,11 @@ Tab.prototype.hide = function(){
 Tab.prototype.show = function(){
   this.element.classList.remove("hide");
 };
+
+Tab.prototype.activate = function(){
+  this.element.classList.add("active");
+};
+
+Tab.prototype.inactivate = function(){
+  this.element.classList.remove("active");
+};

@@ -5,7 +5,8 @@
 function TxtWin(){
   this.id = "";
   this.tabs_=[];
-  this.tabbar;
+  this.tabContainer;
+  this.win;
 }
 
 /**
@@ -13,7 +14,11 @@ function TxtWin(){
  * @param {object} launchData
  */
 TxtWin.prototype.init = function (launchData){
-  this.tabbar = document.getElementById("tab-container");
+  this.win = chrome.app.window.current();
+  this.tabContainer = document.getElementById("tab-container");
+  document.getElementById("new-tab").addEventListener("click",this.openTab.bind(this));
+  document.getElementById("maximize").addEventListener("click",this.maximize.bind(this));
+  document.getElementById("close").addEventListener("click",this.close.bind(this));
   this.id = chrome.app.window.current().id;
   if(launchData&&launchData.items){
     for(var i in launchData.items){
@@ -35,14 +40,27 @@ TxtWin.prototype.close = function(){
 };
 
 /**
+ * Toggle the maximize state
+ */
+TxtWin.prototype.maximize = function(){
+  if(this.win.isMaximized()){
+    this.win.restore();
+  }else{
+    this.win.maximize();
+  }
+};
+
+/**
  * Open a new tab
  * @param {FileEntry} file - File to open in the new tab
  */
 TxtWin.prototype.openTab = function(file){
   var tab = new Tab(file);
+  tab.element.addEventListener("click",this.activateTab.bind(this,tab));
+  tab.element.lastElementChild.addEventListener("click",this.closeTab.bind(this,tab));
   this.tabs_.push(tab);
   tab.hide();
-  this.tabbar.appendChild(tab.element);
+  this.tabContainer.appendChild(tab.element);
   setTimeout(function(){
     window.getComputedStyle(this.element).opacity;
     this.show();
@@ -53,9 +71,11 @@ TxtWin.prototype.openTab = function(file){
 /**
  * Close a tab
  * @param {Tab} tab - Tab to close
+ * @param {Event} event - the event that cause the tab to close if any
  */
-TxtWin.prototype.closeTab = function(tab){
+TxtWin.prototype.closeTab = function(tab,event){
   tab.close(function(){
+    event.stopPropagation();
     for (var i = 0; i < this.tabs_.length; i++) {
       if (tab === this.tabs_[i]) {
         this.tabs_.splice(i, 1);
@@ -67,6 +87,14 @@ TxtWin.prototype.closeTab = function(tab){
       this.close();
     }
   }.bind(this));
+};
+
+/**
+ * Set a tab as the active tab
+ * @param {Tab} tab - tab to activate
+ */
+TxtWin.prototype.activateTab = function(tab){
+  this.tabs_.forEach(function(cur){if(cur===tab){cur.activate()}else{cur.inactivate()}});
 };
 
 txtWin = new TxtWin();
