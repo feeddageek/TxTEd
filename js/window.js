@@ -7,6 +7,7 @@ function TxtWin(){
   this.tabs_=[];
   this.tabContainer;
   this.win;
+  this.editor;
 }
 
 /**
@@ -16,6 +17,7 @@ function TxtWin(){
 TxtWin.prototype.init = function (launchData){
   this.win = chrome.app.window.current();
   this.tabContainer = document.getElementById("tab-container");
+  this.editor = document.getElementsByClassName("editor")[0];
   document.getElementById("new-tab").addEventListener("click",this.openTab.bind(this));
   document.getElementById("maximize").addEventListener("click",this.maximize.bind(this));
   document.getElementById("close").addEventListener("click",this.close.bind(this));
@@ -26,6 +28,7 @@ TxtWin.prototype.init = function (launchData){
     }
   }else{
     this.openTab();
+    this.activateTab(this.tabs_[0]);
   }
   chrome.runtime.getBackgroundPage(function(bg){bg.background.windowCreated(this)}.bind(this));
   console.log("TxTWin initialized: ",this);
@@ -75,7 +78,7 @@ TxtWin.prototype.openTab = function(file){
  */
 TxtWin.prototype.closeTab = function(tab,event){
   tab.close(function(){
-    event.stopPropagation();
+    event && event.stopPropagation();
     for (var i = 0; i < this.tabs_.length; i++) {
       if (tab === this.tabs_[i]) {
         this.tabs_.splice(i, 1);
@@ -95,6 +98,8 @@ TxtWin.prototype.closeTab = function(tab,event){
  */
 TxtWin.prototype.activateTab = function(tab){
   this.tabs_.forEach(function(cur){if(cur===tab){cur.activate()}else{cur.inactivate()}});
+  this.editor.parentNode.replaceChild(tab.editor.element,this.editor);
+  this.editor = tab.editor.element;
 };
 
 txtWin = new TxtWin();

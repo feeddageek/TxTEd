@@ -14,7 +14,7 @@ function Tab(file){
   this.element.classList.add("unsaved");
   }
   this.element.draggable = true;
-  this.editor;
+  this.editor = new Editor();
 }
 
 /**
